@@ -21,46 +21,50 @@ import java.net.UnknownHostException;
 public class Fifteen {
     public static void main(String[] args) {
         // Check command line arguments.
-        if (args.length != 3) {
-            System.err.println(
-                    "Usage: java Fifteen <playerName> <host> <port>");
+        if (args.length != 5) {
+            System.err.println("Usage: java Fifteen <playername> " +
+                "<c_host> <c_port> <s_host> <s_port>");
             System.exit(0);
         }
 
         // Sanitize and retrieve arguments.
-        String host = args[1].trim();
-        int port = -1;
+        String playername = args[0].trim();
+        String c_host = args[1].trim();
+        String s_host = args[3].trim();
+        int c_port, s_port = -1;
         try {
-            port = Integer.parseInt(args[2].trim());
+            c_port = Integer.parseInt(args[2].trim());
+            s_port = Integer.parseInt(args[4].trim());
         } catch (NumberFormatException e) {
             System.err.println(
                     "Error: Given port is not an integer value.");
-            System.err.println(
-                    "Usage: java Fifteen <playerName> <host> <port>");
+            System.err.println("Usage: java Fifteen <playername> " +
+                    "<c_host> <c_port> <s_host> <s_port>");
             System.exit(0);
         }
 
         // Check the hostname and port number, and attempt to connect.
-        Socket socket = null;
+        Socket s_socket = null;
         try {
-            socket = new Socket(host, port);
+            s_socket = new Socket(s_host, s_port);
         } catch (UnknownHostException e) {
             System.err.println(
                     "Error: Given host is unknown.");
-            System.err.println(
-                    "Usage: java Fifteen <playerName> <host> <port>");
+            System.err.println("Usage: java Fifteen <playername> " +
+                    "<c_host> <c_port> <s_host> <s_port>");
             System.exit(0);
         } catch (IOException e) {
             System.err.println(
                     "Error: Connection to the given host and port failed.");
-            System.err.println(
-                    "Usage: java Fifteen <playerName> <host> <port>");
+            System.err.println("Usage: java Fifteen <playername> " +
+                    "<c_host> <c_port> <s_host> <s_port>");
             System.exit(0);
         }
 
         // Create the ModelProxy and View, and link to the listeners.
-        FifteenModelProxy fifteenMP = new FifteenModelProxy(socket, args[0]);
-        FifteenView fifteenV = new FifteenView(args[0]);
+        FifteenModelProxy fifteenMP =
+                new FifteenModelProxy(s_socket, playername);
+        FifteenView fifteenV = new FifteenView(playername);
         fifteenV.setViewListener(fifteenMP);
         fifteenMP.setModelListener(fifteenV);
         Thread t = new Thread(fifteenMP);
