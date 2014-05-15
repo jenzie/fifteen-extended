@@ -7,12 +7,8 @@
  * http://www.cs.rit.edu/~wrc/courses/csci251/projects/4/
  */
 
-import java.io.IOException;
-import java.io.PrintStream;
 import java.net.DatagramSocket;
 import java.net.InetSocketAddress;
-import java.net.Socket;
-import java.util.Scanner;
 
 /**
  * * Proxy to the actual Model, that is located on the server.
@@ -20,14 +16,14 @@ import java.util.Scanner;
 public class FifteenModelProxy implements Runnable, FifteenViewListener {
     private InetSocketAddress server; // maintains the session
     private DatagramSocket mailbox; // sends and receives packets (messages)
-    private  FifteenMailboxManager mailboxManager; // manages the mailbox
+    private FifteenMailboxManager mailboxManager; // manages the mailbox
     private FifteenModelListener fifteenML; // communicate to the view
 
     /**
      * Constructor for FifteenModelProxy.
      *
-     * @param server maintains the session
-     * @param mailbox sends and receives packets (messages)
+     * @param server     maintains the session
+     * @param mailbox    sends and receives packets (messages)
      * @param playerName the name of the current player
      */
     public FifteenModelProxy(InetSocketAddress server, DatagramSocket mailbox,
@@ -41,6 +37,7 @@ public class FifteenModelProxy implements Runnable, FifteenViewListener {
 
     /**
      * Set the model listener to communicate to the view.
+     *
      * @param fifteenML the model listener.
      */
     public void setModelListener(FifteenModelListener fifteenML) {

@@ -2,11 +2,11 @@
  * Model communicates to the view through the model listener.
  *
  * @author Jenny Zhen
- *         date: 05.17.14
- *         language: Java
- *         file: FifteenModelListener.java
- *         assignment: Fifteen
- *         http://www.cs.rit.edu/~wrc/courses/csci251/projects/4/
+ * date: 05.17.14
+ * language: Java
+ * file: FifteenModelListener.java
+ * assignment: Fifteen
+ * http://www.cs.rit.edu/~wrc/courses/csci251/projects/4/
  */
 
 public interface FifteenModelListener {
