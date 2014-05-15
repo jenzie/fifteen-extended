@@ -1,0 +1,50 @@
+@media screen {
+	img	{
+		border-style: none
+	}
+	body	{
+		background-color: #EEE8CD;
+	}
+}
+@media screen, print {
+	body	{
+		margin-left: 2%;
+		margin-right: 2%;
+		background-image: none;
+	}
+	h3.emph	{
+		font-style: italic;
+		font-weight: normal;
+	}
+	.uline	{
+		text-decoration: underline;
+	}
+	.oline	{
+		text-decoration: overline;
+	}
+	.strike	{
+		text-decoration: line-through;
+	}
+	.top	{
+		vertical-align: top;
+	}
+	.middle	{
+		vertical-align: middle;
+	}
+	.center	{
+		text-align: center;
+	}
+	.left	{
+		text-align: left;
+	}
+	.right	{
+		text-align: right;
+	}
+	.option	{
+		text-align: center;
+		font-family: monospace;
+	}
+	.code	{
+		font-family: monospace;
+	}
+}

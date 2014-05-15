@@ -1,0 +1,429 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+  <title>CSCI-251 - Programming Project 4</title>
+  <link rel="stylesheet" type="text/css" href="CSCI-251%20-%20Programming%20Project%204_files/de.css">
+  <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+  <meta name="robots" content="nofollow,noarchive">
+</head>
+<body>
+
+<h1>CSCI-251 - Programming Project 4</h1>
+
+<h2>Due:
+Saturday, May 17, 2014
+
+</h2>
+
+<p>
+<em>
+Last updated
+2014/04/28 10:13:46
+
+</em>
+</p>
+
+<p><em>Update history:</em></p>
+
+<table>
+
+<tbody><tr>
+   <td><code>2014/04/28:</code></td>
+   <td><code>initial version</code></td>
+</tr>
+
+</tbody></table>
+
+<hr>
+
+<ol>
+<li><a href="#intro">Introduction</a>
+</li><li><a href="#over">Overview</a>
+</li><li><a href="#details">Program Requirements</a>
+</li><li><a href="#files">Supplied Files</a>
+</li><li><a href="#submit">Turning In Your Solution</a>
+</li><li><a href="#grading">Grading</a>
+</li><li><a href="#notes">Notes</a>
+</li></ol>
+
+<hr>
+
+<a name="intro"></a>
+<h2>1. Introduction</h2>
+
+<p>
+For this assignment, you will write Java programs that function as the
+client side and the server side of a client-server system.
+The goal of this assignment is to help you learn about network
+programming with datagrams.
+</p>
+
+<hr>
+
+<a name="over"></a>
+<h2>2. Overview</h2>
+
+<p>
+In the previous project, you implemented the client side of a
+client-server network application that played the classic game Fifteen.
+For this assignment, you will expand upon your work on that program.
+</p>
+
+<hr>
+
+<a name="details"></a>
+<h2>3. Program Requirements</h2>
+
+<h3>3.1. Network Game</h3>
+
+<p>
+For this project you will implement both the client side and the server
+side for a Fifteen client-server network application.
+As before,
+the network application is a multi-session multi-client application;
+the server supports any number of simultaneous sessions, with each
+session consisting of two players (clients) playing against each other.
+The server does not participate in the game — it is just a
+glorified game board.
+</p>
+
+<p>
+Unlike the previous assignment, your client and server will communicate
+using UDP datagrams, using a protocol that you will design.
+(See below for more information.)
+</p>
+
+<p>
+The server program is run with this command:
+</p>
+
+<blockquote><pre>java FifteenServer <em>s_host</em> <em>s_port</em>
+</pre></blockquote>
+
+<p>
+The server will receive datagrams that are sent to it at
+<code><em>s_host</em>:<em>s_port</em></code>.
+</p>
+
+<p>
+The client program is run with this command:
+</p>
+
+<blockquote><pre>java Fifteen <em>playername</em> <em>c_host</em> <em>c_port</em> <em>s_host</em> <em>s_port</em>
+</pre></blockquote>
+
+<p>
+The client receives datagrams sent by the server to
+<code><em>c_host</em>:<em>c_port</em></code>, and sends datagrams
+to the server at
+<code><em>s_host</em>:<em>s_port</em></code>.
+</p>
+
+<p>
+When a client starts up,
+if the server has no sessions, or if every existing session already
+has two players, the server creates a new session and adds the client to
+that session; the client then waits to start playing until another client
+joins the session.
+Otherwise, the server has a session with one waiting client,
+and the server adds the client to that session;
+the two clients then start playing each other.
+As before, the first client to connect to the server for a session is
+given ID 1, and the second client receives ID 2.
+</p>
+
+<p>
+The server keeps track of whose turn it is; only that player
+is allowed to pick a number.
+The server also keeps track of each player's score
+and detects when one player wins or the game is a draw.
+</p>
+
+<p>
+Unlike the previous assignment, for a single game session,
+there will be three network ports in use:
+</p>
+
+<ul>
+<li><code><em>s_port</em></code>, which is used by the server to
+receive messages from all clients;
+</li><li><code><em>c_port1</em></code>, used by the first client to
+receive messages sent to it from the server; and
+</li><li><code><em>c_port2</em></code>, used by the second client to
+receive messages sent to it from the server.
+</li></ul>
+
+<p>
+For example, assuming the the server and both clients are running on the
+local host, and that the server is using port 9876 for communication,
+here are example commands that could be used to start the three processes
+(presumably in separate windows):
+</p>
+
+<blockquote><pre>java FifteenServer localhost 9876
+java Fifteen Alice localhost 8801 localhost 9876
+java Fifteen Bob localhost 8802 localhost 9876
+</pre></blockquote>
+
+<p>
+If a second session is is started between two other players, they must
+also select unique ports; for example:
+</p>
+
+<blockquote><pre>java Fifteen Carol localhost 8803 localhost 9876
+java Fifteen Dave localhost 8804 localhost 9876
+</pre></blockquote>
+
+<h3>3.2. Client GUI</h3>
+
+<p>
+The client's graphical user interface is identical to the interface
+described in <a href="http://www.cs.rit.edu/%7Ewrc/courses/csci251/projects/3/">project 3</a>.
+The basic GUI is shown here; this represents a game between players Alice
+and Bob at the beginning of their game:
+</p>
+
+<blockquote>
+<img src="CSCI-251%20-%20Programming%20Project%204_files/fig01.png" alt="client GUI">
+</blockquote>
+
+<p>
+The behavior and use of the text fields and buttons of the 
+client GUI are unchanged from the previous assignment.
+Refer to the <a href="http://www.cs.rit.edu/%7Ewrc/courses/csci251/projects/3/">project 3</a> writeup for details.
+</p>
+
+<p>
+The primary differences between the client for this assignment and the
+client for the previous assignment are that this assignment uses UDP
+datagrams for communication (as opposed to connection-oriented TCP
+sockets), and the messages that are transmitted between the clients and
+the server are of your own design (see below for details).
+</p>
+
+<h3>3.3. Protocol</h3>
+
+<p>
+The client and server exchange messages transported in UDP datagrams.
+For this assignment, you will design the protocol.
+You may elect to use a text-based protocol (as in the previous
+assignment), a binary protocol, or an object-based protocol.
+In addition, you will decide what messages must be sent.
+</p>
+
+<p>
+In general, you can use the set of messages from the previous assignment
+as a guide to the types of messages your programs must handle.
+There will, of necessity, be changes to the messages (for example, in
+addition to the player name, the client must tell the server which host
+and port it will be using).
+</p>
+
+<p>
+For purposes of this assignment, you may assume that UDP datagrams are
+reliable and are never delivered out of order.
+You may, if you wish, include error-checking information (checksums,
+sequence numbers, etc.) in the packets, but this is not required.
+(In the "real world" this is not the case, but the messages you will be
+sending are brief, and the distance they must travel is short enough that
+you are unlikely to suffer datagram loss.)
+</p>
+
+<h3>3.4. Design</h3>
+
+<p>
+The server program must be a class named <code>FifteenServer</code>, and
+must be run with the command line described above.
+Similarly, the client program must be a class named <code>Fifteen</code>,
+and must be run with the command line described above.
+Neither program should be in a package.
+</p>
+
+<p>
+If the command line for either program does not have the required number
+of arguments, or if any argument is invalid, the program must print an
+appropriate usage message on the standard error output and must terminate.
+The wording of the message is up to you.
+</p>
+
+<p>
+If the client program cannot connect to the server at the given server
+host and port, if the server cannot receive datagrams at the given 
+server host and port, if the server cannot send datagrams to either
+specified client host and port, or if any other error condition occurs,
+the program must print an appropriate error message on the standard error
+output and must terminate.
+Again, the wording of the message is up to you.
+</p>
+
+<p>
+Both the server and client programs must not print anything to the
+standard output.
+</p>
+
+<p>
+The client program must display and operate the graphical user interface
+specified above.
+</p>
+
+<p>
+The client program must follow the network programming patterns studied
+in class (MVC, Observer, Network Proxy, etc.) as appropriate, and must be
+designed using object-oriented design principles as appropriate.
+It must also make use of reusable software components as appropriate.
+</p>
+
+<p>
+Each class or interface must include a Javadoc comment
+describing the overall class or interface.
+</p>
+
+<p>
+Each method within each class or interface must include a Javadoc comment
+describing the overall method, the arguments if any, the return value if
+any, and the exceptions thrown if any.
+(See the Java source file examples available via the course
+<a href="http://www.cs.rit.edu/%7Ewrc/courses/common/csci251/links.shtml"> <em>Resources</em></a>
+page for examples of the style of Javadoc comments I'm looking for.)
+</p>
+
+<hr>
+
+<a name="files"></a>
+<h2>4. Supplied Files</h2>
+
+<p>
+Unlike previous assignments, there are no files provided for you.
+However, your client program will be almost unchanged from the one you
+developed for the previous assignment, and it is expected that you will
+use it as the basis for that portion of your solution to this assignment.
+</p>
+
+<hr>
+
+<a name="submit"></a>
+<h2>5. How to Submit your Solution</h2>
+
+<p>
+Because this assignment involves a graphical interface,
+your code will not be tested at the time you
+submit it; it will only be compiled to ensure that it is complete.
+To submit your solution, on the CS
+Ubuntu<sup><a href="#ftn">®</a></sup>
+systems, use this command:
+</p>
+
+<blockquote>
+<code>try  wrc-grd  cpds-4  </code>  <em>files</em>
+</blockquote>
+
+<p>
+where <em>files</em> are the names of all the <code>.java</code>
+files implementing your solution (two of which must be named
+<code>Fifteen.java</code> and <code>FifteenServer.java</code>).
+You may also submit a <code>README</code> file if you wish to communicate
+additional information that I should know before grading your program.
+</p>
+
+<p>
+The minimum acceptance test is that your code must be complete - that is,
+it must compile cleanly when submitted.
+Submissions <em>will not be accepted</em> if they fail to compile cleanly.
+(Warning messages from the compiler are acceptable, but not fatal errors.)
+</p>
+
+<hr>
+
+<a name="grading"></a>
+<h2>6. Grading</h2>
+
+<p>
+Your submission will be graded out of 50 points as follows:
+</p>
+
+<blockquote>
+<table border="1" cellpadding="3">
+
+<tbody><tr>
+ <th>Criterion</th><th>Value</th><th>Interpretation</th>
+</tr>
+
+<tr>
+ <td>Performance</td><td>35 points</td>
+ <td>How well your program's output meets the performance requirements
+described above</td>
+</tr>
+
+<tr>
+ <td>Design</td><td>15 points</td>
+ <td>How well your program meets the design requirements described above</td>
+</tr>
+
+</tbody></table>
+</blockquote>
+
+<hr>
+
+<a name="notes"></a>
+<h2>7. Notes</h2>
+
+<p>
+If you are not sure what the client or server is supposed to do in any
+particular situation, send me email; I will respond, and will put a copy
+of my response in the "questions on this assignment" page (linked from the
+course <a href="http://www.cs.rit.edu/%7Ewrc/courses/csci251/assignments.shtml#projects">
+<em>Assignments</em></a> page).
+</p>
+
+<p>
+If you designed your Fifteen client program correctly for the previous
+assignment, all the network communication should be isolated to your
+Network Proxy object.
+That class implementation will be where the bulk of the changes to your
+client must be made.
+</p>
+
+<p>
+Remember that you must use JDK 1.7 to compile and run your program.
+This means that you must modify your shell <code>PATH</code> and
+<code>CLASSPATH</code> environment variables.
+Example commands to do this are shown above.
+You can either execute these commands in each shell window, or you can
+modify your shell configuration files (<code>.bashrc</code> and
+<code>.bash_profile</code> for <code>bash</code>, <code>.cshrc</code> and
+<code>.login</code> for <code>csh</code>) to automatically set these
+variables in every shell you start up.
+<em>Note:</em>
+only shells you start up after you modify the configuration
+file(s) will have the new configuration - shells already running won't be
+affected.
+</p>
+
+<p>
+Late submissions will be graded only if you requested an extension before
+the deadline for submitting the assignment.
+See the <a href="http://www.cs.rit.edu/%7Ewrc/courses/csci251/syllabus/">course syllabus</a> for
+a description of the extension policy.
+</p>
+
+<p>
+The specification for output produced by your program is exact.
+Any deviation (e.g., extra spaces, debugging messages in the output,
+etc.) will be considered to be incorrect output.
+</p>
+
+<p>
+Refer to the example programs we have studied in class for examples of
+reasonable programming style, or to the coding style recommendations
+linked from the
+<a href="http://www.cs.rit.edu/%7Ewrc/courses/csci251/syllabus/">course syllabus</a>.
+</p>
+
+<hr>
+<a name="ftn"></a>
+<em>
+Ubuntu<sup>®</sup> is a registered trademark of Canonical Ltd.
+
+</em>
+
+
+</body></html>
