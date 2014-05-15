@@ -8,8 +8,7 @@
  */
 
 import java.io.IOException;
-import java.net.Socket;
-import java.net.UnknownHostException;
+import java.net.*;
 
 /**
  * In the game of Fifteen, two players take turns picking a number from 1 to 9.
@@ -31,7 +30,7 @@ public class Fifteen {
         String playername = args[0].trim();
         String c_host = args[1].trim();
         String s_host = args[3].trim();
-        int c_port, s_port = -1;
+        int c_port = -1, s_port = -1;
         try {
             c_port = Integer.parseInt(args[2].trim());
             s_port = Integer.parseInt(args[4].trim());
@@ -44,18 +43,13 @@ public class Fifteen {
         }
 
         // Check the hostname and port number, and attempt to connect.
-        Socket s_socket = null;
+        InetSocketAddress server = new InetSocketAddress(s_host, s_port);
+        DatagramSocket mailbox = null;
         try {
-            s_socket = new Socket(s_host, s_port);
-        } catch (UnknownHostException e) {
+            mailbox = new DatagramSocket(new InetSocketAddress(c_host, c_port));
+        } catch (SocketException e) {
             System.err.println(
                     "Error: Given host is unknown.");
-            System.err.println("Usage: java Fifteen <playername> " +
-                    "<c_host> <c_port> <s_host> <s_port>");
-            System.exit(0);
-        } catch (IOException e) {
-            System.err.println(
-                    "Error: Connection to the given host and port failed.");
             System.err.println("Usage: java Fifteen <playername> " +
                     "<c_host> <c_port> <s_host> <s_port>");
             System.exit(0);
@@ -63,7 +57,7 @@ public class Fifteen {
 
         // Create the ModelProxy and View, and link to the listeners.
         FifteenModelProxy fifteenMP =
-                new FifteenModelProxy(s_socket, playername);
+                new FifteenModelProxy(server, mailbox, playername);
         FifteenView fifteenV = new FifteenView(playername);
         fifteenV.setViewListener(fifteenMP);
         fifteenMP.setModelListener(fifteenV);

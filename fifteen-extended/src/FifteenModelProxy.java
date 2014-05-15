@@ -9,6 +9,8 @@
 
 import java.io.IOException;
 import java.io.PrintStream;
+import java.net.DatagramSocket;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.Scanner;
 
@@ -16,7 +18,8 @@ import java.util.Scanner;
  * * Proxy to the actual Model, that is located on the server.
  */
 public class FifteenModelProxy implements Runnable, FifteenViewListener {
-    private Socket socket; // maintains the session
+    private InetSocketAddress server; // maintains the session
+    private DatagramSocket mailbox; // sends and receives packets (messages)
     private Scanner in; // server-to-client messages
     private PrintStream out; // client-to-server messages
     private FifteenModelListener fifteenML; // communicate to the view
@@ -24,11 +27,14 @@ public class FifteenModelProxy implements Runnable, FifteenViewListener {
     /**
      * Constructor for FifteenModelProxy.
      *
-     * @param socket maintains the session
+     * @param server maintains the session
+     * @param mailbox sends and receives packets (messages)
      * @param playerName the name of the current player
      */
-    public FifteenModelProxy(Socket socket, String playerName) {
-        this.socket = socket;
+    public FifteenModelProxy(InetSocketAddress server, DatagramSocket mailbox,
+                             String playerName) {
+        this.server = server;
+        this.mailbox = mailbox;
 
         // Set up the I/O (input/output) for client-to-server messages.
         try {
