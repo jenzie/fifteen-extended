@@ -29,6 +29,9 @@ public class FifteenMailboxManager {
 
     /**
      * Sends a datagram to the recipient.
+     *
+     * @param message the message to send.
+     * @param recipient the receiver of the message.
      */
     public void sendMessage(String message, InetSocketAddress recipient) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -37,7 +40,7 @@ public class FifteenMailboxManager {
         try {
             output.writeUTF(message);
             byte[] payload = baos.toByteArray();
-            mailbox.send(
+            this.mailbox.send(
                     new DatagramPacket(payload, payload.length, recipient));
         } catch (IOException e ) {
             System.err.println(
@@ -62,8 +65,8 @@ public class FifteenMailboxManager {
         DatagramPacket packet = new DatagramPacket(payload, payload.length);
 
         try {
-            mailbox.receive(packet);
-            sender = packet.getSocketAddress();
+            this.mailbox.receive(packet);
+            this.sender = packet.getSocketAddress();
             DataInputStream input = new DataInputStream(
                     new ByteArrayInputStream(payload, 0, packet.getLength()));
             return input.readUTF();
@@ -72,5 +75,20 @@ public class FifteenMailboxManager {
                     "Error: Connection to the given host and port failed.");
         }
         return null;
+    }
+
+    /**
+     * Get the previous sender.
+     * @return the previous sender.
+     */
+    public SocketAddress getSender() {
+        return this.sender;
+    }
+
+    /**
+     * Close the connection to the mailbox.
+     */
+    public void close() {
+        this.mailbox.close();
     }
 }

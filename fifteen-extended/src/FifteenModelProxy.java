@@ -20,8 +20,7 @@ import java.util.Scanner;
 public class FifteenModelProxy implements Runnable, FifteenViewListener {
     private InetSocketAddress server; // maintains the session
     private DatagramSocket mailbox; // sends and receives packets (messages)
-    private Scanner in; // server-to-client messages
-    private PrintStream out; // client-to-server messages
+    private  FifteenMailboxManager mailboxManager; // manages the mailbox
     private FifteenModelListener fifteenML; // communicate to the view
 
     /**
@@ -35,16 +34,7 @@ public class FifteenModelProxy implements Runnable, FifteenViewListener {
                              String playerName) {
         this.server = server;
         this.mailbox = mailbox;
-
-        // Set up the I/O (input/output) for client-to-server messages.
-        try {
-            this.in = new Scanner(socket.getInputStream());
-            this.out = new PrintStream(socket.getOutputStream());
-        } catch (IOException e) {
-            System.err.println(
-                    "Error: Connection to the given host and port failed.");
-            System.exit(0);
-        }
+        this.mailboxManager = new FifteenMailboxManager(mailbox);
 
         this.joinServer(playerName);
     }
@@ -65,8 +55,7 @@ public class FifteenModelProxy implements Runnable, FifteenViewListener {
      * @param playerName username of the player.
      */
     public void joinServer(String playerName) {
-        out.println("join " + playerName);
-        out.flush();
+        this.mailboxManager.sendMessage("join " + playerName, this.server);
     }
 
     /**
@@ -78,8 +67,7 @@ public class FifteenModelProxy implements Runnable, FifteenViewListener {
      * @param digit the value the player played.
      */
     public void digitServer(int digit) {
-        out.println("digit " + digit);
-        out.flush();
+        this.mailboxManager.sendMessage("digit " + digit, this.server);
     }
 
     /**
@@ -88,8 +76,7 @@ public class FifteenModelProxy implements Runnable, FifteenViewListener {
      * Sent when the player clicks the New Game button.
      */
     public void newgameServer() {
-        out.println("newgame");
-        out.flush();
+        this.mailboxManager.sendMessage("newgame", this.server);
     }
 
     /**
@@ -98,15 +85,7 @@ public class FifteenModelProxy implements Runnable, FifteenViewListener {
      * Sent when the player closes the window.
      */
     public void quitServer() {
-        out.close();
-        in.close();
-        try {
-            socket.close();
-        } catch (IOException e) {
-            System.err.println(
-                    "Error: Connection to the given host and port failed.");
-            System.exit(0);
-        }
+        this.mailboxManager.close();
     }
 
     @Override
@@ -114,8 +93,9 @@ public class FifteenModelProxy implements Runnable, FifteenViewListener {
      * Tell the server to process inputs.
      */
     public void run() {
-        while (in.hasNextLine()) {
-            String line = in.nextLine();
+        String line = null;
+
+        while ((line = this.mailboxManager.receiveMessage()) != null) {
             String[] message = line.split(" ");
 
             if (message[0].equals("id")) {
@@ -163,8 +143,7 @@ public class FifteenModelProxy implements Runnable, FifteenViewListener {
      * Tell the server a player wants to quit.
      */
     public void quit() {
-        out.println("quit");
-        out.flush();
+        this.mailboxManager.sendMessage("quit", this.server);
         quitServer();
     }
 }
