@@ -1,10 +1,10 @@
 /**
  * @author Jenny Zhen
- * date: 02.20.14
+ * date: 05.17.14
  * language: Java
  * file: Fifteen.java
  * assignment: Fifteen
- * http://www.cs.rit.edu/~wrc/courses/csci251/projects/3/
+ * http://www.cs.rit.edu/~wrc/courses/csci251/projects/4/
  */
 
 import java.io.IOException;
