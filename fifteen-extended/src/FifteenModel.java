@@ -26,8 +26,9 @@ public class FifteenModel implements FifteenViewListener {
     public FifteenModel(String alphaName, FifteenModelListener fifteenML) {
         this.alpha = alphaName;
 
-        for(boolean tile : this.board)
-            tile = false;
+        this.board = new boolean[MAX_TILES];
+        for(int i = 0; i < MAX_TILES; i++)
+            board[i] = false;
 
         this.tilesAvailable = MAX_TILES;
         this.alphaScore = 0;
@@ -42,8 +43,8 @@ public class FifteenModel implements FifteenViewListener {
 
     @Override
     public void newgame() {
-        for(boolean tile : this.board)
-            tile = false;
+        for(int i = 0; i < MAX_TILES; i++)
+            board[i] = false;
 
         this.tilesAvailable = MAX_TILES;
         this.alphaScore = 0;
