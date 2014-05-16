@@ -1,5 +1,4 @@
 /**
- * Model <--> ViewProxy <--> Model Listener <--> ModelProxy <--> View
  * Direction of Communication (where ML is model listener, VL is view listener):
  * ML (view) -> VL (ModelProxy) *-> server -> model
  *      -> ML (ViewProxy) ->  VL (ModelProxy) -> ML (View)
