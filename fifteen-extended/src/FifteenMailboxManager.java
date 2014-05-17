@@ -1,9 +1,3 @@
-import java.io.*;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetSocketAddress;
-import java.net.SocketAddress;
-
 /**
  * @author Jenny Zhen
  * date: 05.17.14
@@ -12,6 +6,11 @@ import java.net.SocketAddress;
  * assignment: Fifteen
  * http://www.cs.rit.edu/~wrc/courses/csci251/projects/4/
  */
+
+import java.io.*;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.SocketAddress;
 
 public class FifteenMailboxManager {
     private DatagramSocket mailbox; // sends and receives packets (messages)

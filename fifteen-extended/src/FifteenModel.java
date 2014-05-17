@@ -18,13 +18,13 @@ public class FifteenModel implements FifteenViewListener {
     private int tilesAvailable; // number of tiles available
     private boolean[] board; // tiles available (true if available)
 
-    private String alpha, beta; // name of the players
+    private String alpha; // name of the Alpha player
     private boolean isCurrentPlayerAlpha; // tracks the current player
     private int alphaScore, betaScore; // scores of the players
     private FifteenModelListener fifteenML; // the view proxy
 
     public FifteenModel(String alphaName, FifteenModelListener fifteenML) {
-        this.alpha = alphaName;
+        this.alpha = alphaName; // save to use when both names are known
 
         this.board = new boolean[MAX_TILES];
         for(int i = 0; i < MAX_TILES; i++)
@@ -39,7 +39,6 @@ public class FifteenModel implements FifteenViewListener {
     }
 
     public void addPlayer(String betaName) {
-        this.beta = betaName;
         this.fifteenML.setID(2);
         this.fifteenML.setName(1, alpha);
         this.fifteenML.setName(2, betaName);
@@ -62,7 +61,7 @@ public class FifteenModel implements FifteenViewListener {
         this.isCurrentPlayerAlpha = true;
 
         String digits = "";
-        for(int i = 0; i < this.board.length; i++)
+        for (boolean ignored : this.board)
             digits += "1";
 
         this.fifteenML.setDigits(digits);
@@ -74,17 +73,14 @@ public class FifteenModel implements FifteenViewListener {
         int index = digit - 1;
 
         // If tile hasn't been set, set tile.
-        if(this.board[index] == false) {
+        if(!this.board[index]) {
             this.board[index] = true;
             this.tilesAvailable--;
 
             // Tell the view to update the board.
             String digits = "";
-            for(int i = 0; i < this.board.length; i++) {
-                if(this.board[i])
-                    digits += "0";
-                else
-                    digits += "1";
+            for (boolean tile : this.board) {
+                digits += tile ? "0" : "1";
             }
             this.fifteenML.setDigits(digits);
 

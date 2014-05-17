@@ -15,7 +15,6 @@ import java.net.InetSocketAddress;
  */
 public class FifteenModelProxy implements Runnable, FifteenViewListener {
     private InetSocketAddress server; // maintains the session
-    private DatagramSocket mailbox; // sends and receives packets (messages)
     private FifteenMailboxManager mailboxManager; // manages the mailbox
     private FifteenModelListener fifteenML; // communicate to the view
 
@@ -29,7 +28,6 @@ public class FifteenModelProxy implements Runnable, FifteenViewListener {
     public FifteenModelProxy(InetSocketAddress server, DatagramSocket mailbox,
                              String playerName) {
         this.server = server;
-        this.mailbox = mailbox;
         this.mailboxManager = new FifteenMailboxManager(mailbox);
 
         this.joinServer(playerName);
@@ -90,7 +88,7 @@ public class FifteenModelProxy implements Runnable, FifteenViewListener {
      * Tell the server to process inputs.
      */
     public void run() {
-        String line = null;
+        String line;
 
         while ((line = this.mailboxManager.receiveMessage()) != null) {
             String[] message = line.split(" ");

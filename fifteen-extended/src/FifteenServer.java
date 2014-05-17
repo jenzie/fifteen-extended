@@ -36,7 +36,6 @@ public class FifteenServer {
         }
 
         // Check the hostname and port number, and attempt to connect.
-        SocketAddress server = new InetSocketAddress(s_host, s_port);
         DatagramSocket mailbox = null;
         FifteenMailboxManager mailboxManager = null;
         try {
@@ -63,7 +62,7 @@ public class FifteenServer {
             SocketAddress sender = mailboxManager.getSender();
 
             FifteenModel model = sessions.get(sender);
-            FifteenViewProxy fifteenVP = null;
+            FifteenViewProxy fifteenVP;
 
             // If session if empty, Beta joined.
             // Else, Alpha joined.
