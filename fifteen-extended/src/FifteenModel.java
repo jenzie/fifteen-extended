@@ -35,10 +35,12 @@ public class FifteenModel implements FifteenViewListener {
         this.betaScore = 0;
 
         this.fifteenML = fifteenML;
+        this.fifteenML.setID(1);
     }
 
     public void addPlayer(String betaName) {
         this.beta = betaName;
+        this.fifteenML.setID(2);
     }
 
     @Override
