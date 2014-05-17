@@ -29,11 +29,10 @@ public class FifteenMailboxManager {
 
     /**
      * Sends a datagram to the recipient.
-     *
-     * @param message the message to send.
+     *  @param message the message to send.
      * @param recipient the receiver of the message.
      */
-    public void sendMessage(String message, InetSocketAddress recipient) {
+    public void sendMessage(String message, SocketAddress recipient) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         DataOutputStream output = new DataOutputStream(baos);
 

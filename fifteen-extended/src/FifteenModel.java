@@ -41,6 +41,10 @@ public class FifteenModel implements FifteenViewListener {
     public void addPlayer(String betaName) {
         this.beta = betaName;
         this.fifteenML.setID(2);
+        this.fifteenML.setName(1, alpha);
+        this.fifteenML.setName(2, betaName);
+        this.isCurrentPlayerAlpha = true;
+        this.fifteenML.setTurn(1);
     }
 
     @Override
@@ -51,29 +55,74 @@ public class FifteenModel implements FifteenViewListener {
         this.tilesAvailable = MAX_TILES;
         this.alphaScore = 0;
         this.betaScore = 0;
+        this.fifteenML.setScore(1, 0);
+        this.fifteenML.setScore(2, 0);
         this.isCurrentPlayerAlpha = true;
+
+        String digits = "";
+        for(int i = 0; i < this.board.length; i++)
+            digits += "1";
+
+        this.fifteenML.setDigits(digits);
+        this.fifteenML.setTurn(1);
     }
 
     @Override
     public void setDigit(int digit) {
         int index = digit - 1;
 
+        // If tile hasn't been set, set tile.
         if(this.board[index] == false) {
             this.board[index] = true;
             this.tilesAvailable--;
 
+            // Tell the view to update the board.
+            String digits = "";
+            for(int i = 0; i < this.board.length; i++) {
+                if(this.board[i])
+                    digits += "0";
+                else
+                    digits += "1";
+            }
+            this.fifteenML.setDigits(digits);
+
+            // Figure out who played the tile.
             if(this.isCurrentPlayerAlpha) {
                 this.alphaScore += digit;
-                this.isCurrentPlayerAlpha = false;
+                this.fifteenML.setScore(1, alphaScore);
+
+                // If win, set win to Alpha. Else, continue.
+                if(this.alphaScore == WIN_SCORE)
+                    this.fifteenML.setWin(1);
+                else {
+                    this.isCurrentPlayerAlpha = false;
+                    this.fifteenML.setTurn(2);
+                }
             } else {
                 this.betaScore += digit;
-                this.isCurrentPlayerAlpha = true;
+                this.fifteenML.setScore(2, betaScore);
+
+                // If win, set win to Beta. Else, continue.
+                if(this.betaScore == WIN_SCORE)
+                    this.fifteenML.setWin(2);
+                else {
+                    this.isCurrentPlayerAlpha = true;
+                    this.fifteenML.setTurn(1);
+                }
             }
+
+            // If no more tiles available to play, set win to draw.
+            if(this.tilesAvailable == 0)
+                this.fifteenML.setWin(0);
         }
     }
 
     @Override
     public void quit() {
         this.fifteenML.quit();
+    }
+
+    public FifteenModelListener getModelListener() {
+        return this.fifteenML;
     }
 }

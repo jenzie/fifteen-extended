@@ -11,6 +11,7 @@
 
 import java.net.DatagramSocket;
 import java.net.InetSocketAddress;
+import java.net.SocketAddress;
 import java.net.SocketException;
 import java.util.HashMap;
 
@@ -35,12 +36,12 @@ public class FifteenServer {
         }
 
         // Check the hostname and port number, and attempt to connect.
-        InetSocketAddress server = new InetSocketAddress(s_host, s_port);
+        SocketAddress server = new InetSocketAddress(s_host, s_port);
         DatagramSocket mailbox = null;
+        FifteenMailboxManager mailboxManager = null;
         try {
             mailbox = new DatagramSocket(new InetSocketAddress(s_host, s_port));
-            FifteenMailboxManager mailboxManager =
-                    new FifteenMailboxManager(mailbox);
+            mailboxManager = new FifteenMailboxManager(mailbox);
         } catch (SocketException e) {
             System.err.println(
                     "Error: Given host is unknown.");
@@ -49,7 +50,41 @@ public class FifteenServer {
         }
 
         // Keep track of all the games going on.
-        HashMap<InetSocketAddress, FifteenModel> sessions =
-                new HashMap<InetSocketAddress, FifteenModel>();
+        HashMap<SocketAddress, FifteenModel> sessions =
+                new HashMap<SocketAddress, FifteenModel>();
+
+        // If session is empty, a new session needs to be created.
+        // Else, add the beta player to the alpha player's session.
+        FifteenModel session = null;
+
+        while(true) {
+            String line = mailboxManager.receiveMessage();
+            String[] message = line.split(" ");
+            SocketAddress sender = mailboxManager.getSender();
+
+            FifteenModel model = sessions.get(sender);
+            FifteenViewProxy fifteenVP = null;
+
+            if(message[0].equals("join")) {
+                if(session == null) {
+                    fifteenVP = new FifteenViewProxy(mailbox, sender);
+                    session = new FifteenModel(message[1], fifteenVP);
+                    sessions.put(sender, session);
+                    System.out.println("Alpha Joined");
+                } else {
+                    fifteenVP = (FifteenViewProxy) session.getModelListener();
+                    fifteenVP.addPlayer(mailbox, sender);
+                    session.addPlayer(message[1]);
+                    sessions.put(sender, session);
+                    session = null;
+                    System.out.println("Beta Joined");
+                }
+            } else if(message[0].equals("digit"))
+                model.setDigit(Integer.parseInt(message[1]));
+            else if(message[0].equals("newgame"))
+                model.newgame();
+            else if(message[0].equals("quit"))
+                model.quit();
+        }
     }
 }

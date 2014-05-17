@@ -11,10 +11,11 @@
 
 import java.net.DatagramSocket;
 import java.net.InetSocketAddress;
+import java.net.SocketAddress;
 
 public class FifteenViewProxy implements FifteenModelListener {
     private FifteenMailboxManager alpha_mailbox, beta_mailbox;
-    private InetSocketAddress alpha_client, beta_client;
+    private SocketAddress alpha_client, beta_client;
 
     /**
      * Constructor for FifteenViewProxy.
@@ -22,7 +23,7 @@ public class FifteenViewProxy implements FifteenModelListener {
      * @param alpha_client session for alpha player
      */
     public FifteenViewProxy(
-            DatagramSocket alpha_mailbox, InetSocketAddress alpha_client) {
+            DatagramSocket alpha_mailbox, SocketAddress alpha_client) {
         this.alpha_mailbox = new FifteenMailboxManager(alpha_mailbox);
         this.alpha_client = alpha_client;
     }
@@ -33,7 +34,7 @@ public class FifteenViewProxy implements FifteenModelListener {
      * @param beta_client session for beta player
      */
     public void addPlayer(DatagramSocket beta_mailbox,
-                          InetSocketAddress beta_client) {
+                          SocketAddress beta_client) {
         this.beta_mailbox = new FifteenMailboxManager(beta_mailbox);
         this.beta_client = beta_client;
     }
