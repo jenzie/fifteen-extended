@@ -65,19 +65,19 @@ public class FifteenServer {
             FifteenModel model = sessions.get(sender);
             FifteenViewProxy fifteenVP = null;
 
+            // If session if empty, Beta joined.
+            // Else, Alpha joined.
             if(message[0].equals("join")) {
                 if(session == null) {
                     fifteenVP = new FifteenViewProxy(mailbox, sender);
                     session = new FifteenModel(message[1], fifteenVP);
                     sessions.put(sender, session);
-                    System.out.println("Alpha Joined");
                 } else {
                     fifteenVP = (FifteenViewProxy) session.getModelListener();
                     fifteenVP.addPlayer(mailbox, sender);
                     session.addPlayer(message[1]);
                     sessions.put(sender, session);
                     session = null;
-                    System.out.println("Beta Joined");
                 }
             } else if(message[0].equals("digit"))
                 model.setDigit(Integer.parseInt(message[1]));

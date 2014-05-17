@@ -45,6 +45,8 @@ public class FifteenModel implements FifteenViewListener {
         this.fifteenML.setName(2, betaName);
         this.isCurrentPlayerAlpha = true;
         this.fifteenML.setTurn(1);
+        this.fifteenML.setScore(1, 0);
+        this.fifteenML.setScore(2, 0);
     }
 
     @Override

@@ -93,7 +93,6 @@ public class FifteenModelProxy implements Runnable, FifteenViewListener {
         String line = null;
 
         while ((line = this.mailboxManager.receiveMessage()) != null) {
-            System.out.println(line);
             String[] message = line.split(" ");
 
             if (message[0].equals("id")) {

@@ -70,8 +70,7 @@ public class FifteenMailboxManager {
                     new ByteArrayInputStream(payload, 0, packet.getLength()));
             return input.readUTF();
         } catch (IOException e) {
-            System.err.println(
-                    "Error: Connection to the given host and port failed.");
+            // Happens when quitting/exiting the session.
         }
         return null;
     }
