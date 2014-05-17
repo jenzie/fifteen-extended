@@ -19,6 +19,7 @@ public class FifteenModel implements FifteenViewListener {
     private boolean[] board; // tiles available (true if available)
 
     private String alpha, beta; // name of the players
+    private boolean isCurrentPlayerAlpha; // tracks the current player
     private int alphaScore, betaScore; // scores of the players
     private FifteenModelListener fifteenML; //
 
@@ -48,6 +49,7 @@ public class FifteenModel implements FifteenViewListener {
         this.tilesAvailable = MAX_TILES;
         this.alphaScore = 0;
         this.betaScore = 0;
+        this.isCurrentPlayerAlpha = true;
     }
 
     @Override
@@ -57,6 +59,14 @@ public class FifteenModel implements FifteenViewListener {
         if(this.board[index] == false) {
             this.board[index] = true;
             this.tilesAvailable--;
+
+            if(this.isCurrentPlayerAlpha) {
+                this.alphaScore += digit;
+                this.isCurrentPlayerAlpha = false;
+            } else {
+                this.betaScore += digit;
+                this.isCurrentPlayerAlpha = true;
+            }
         }
     }
 
