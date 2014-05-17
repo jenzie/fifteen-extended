@@ -1,4 +1,10 @@
 /**
+ * The view is what the users/players see.
+ *
+ * Direction of Communication (where ML is model listener, VL is view listener):
+ * ML (view) -> VL (ModelProxy) *-> server -> model
+ *      -> ML (ViewProxy) ->  VL (ModelProxy) -> ML (View)
+ *
  * @author Jenny Zhen
  * @author Alan Kaminsky
  * date: 05.17.14
@@ -183,18 +189,18 @@ public class FifteenView extends JFrame implements FifteenModelListener {
         this.fifteenVL = fifteenVL;
     }
 
-    @Override
     /**
      * Store my player's ID.
      */
+    @Override
     public void setID(int player) {
         this.myID = player;
     }
 
-    @Override
     /**
      * Store their name. Set up game.
      */
+    @Override
     public void setName(int player, String name) {
         // Check if this is our player's ID
         if(player != this.myID) {
@@ -204,10 +210,10 @@ public class FifteenView extends JFrame implements FifteenModelListener {
         }
     }
 
-    @Override
     /**
      * Set the available digits on the board, as necessary.
      */
+    @Override
     public void setDigits(String digits) {
         boolean newgame = true;
 
@@ -227,10 +233,10 @@ public class FifteenView extends JFrame implements FifteenModelListener {
         }
     }
 
-    @Override
     /**
      * Set the score on the board for the respective player.
      */
+    @Override
     public void setScore(int player, int score) {
         if(player == this.myID)
             this.myScoreField.setText(this.myName + " = " + score);
@@ -238,10 +244,10 @@ public class FifteenView extends JFrame implements FifteenModelListener {
             this.theirScoreField.setText(this.theirName + " = " + score);
     }
 
-    @Override
     /**
      * Set the turn for the respective player.
      */
+    @Override
     public void setTurn(int player) {
         // If it is our turn/draw, enable available digits.
         if(player == this.myID || player == 0) {
@@ -258,10 +264,10 @@ public class FifteenView extends JFrame implements FifteenModelListener {
         }
     }
 
-    @Override
     /**
      * Set the winner for the respective player.
      */
+    @Override
     public void setWin(int player) {
         if(player == 0)
             this.winnerField.setText("Draw!");
@@ -275,10 +281,10 @@ public class FifteenView extends JFrame implements FifteenModelListener {
             this.digitButton[i].setEnabled(false);
     }
 
-    @Override
     /**
      * Quit the game.
      */
+    @Override
     public void quit() {
         System.exit(0);
     }

@@ -1,4 +1,8 @@
 /**
+ * Direction of Communication (where ML is model listener, VL is view listener):
+ * ML (view) -> VL (ModelProxy) *-> server -> model
+ *      -> ML (ViewProxy) ->  VL (ModelProxy) -> ML (View)
+ *
  * @author Jenny Zhen
  * date: 05.17.14
  * language: Java

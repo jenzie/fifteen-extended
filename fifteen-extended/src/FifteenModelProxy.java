@@ -1,4 +1,10 @@
 /**
+ * Talks to the model, through the server.
+ *
+ * Direction of Communication (where ML is model listener, VL is view listener):
+ * ML (view) -> VL (ModelProxy) *-> server -> model
+ *      -> ML (ViewProxy) ->  VL (ModelProxy) -> ML (View)
+ *
  * @author Jenny Zhen
  * date: 05.17.14
  * language: Java
@@ -83,10 +89,10 @@ public class FifteenModelProxy implements Runnable, FifteenViewListener {
         this.mailboxManager.close();
     }
 
-    @Override
     /**
      * Tell the server to process inputs.
      */
+    @Override
     public void run() {
         String line;
 
@@ -117,26 +123,26 @@ public class FifteenModelProxy implements Runnable, FifteenViewListener {
         }
     }
 
-    @Override
     /**
      * Tell the server to create a new game.
      */
+    @Override
     public void newgame() {
         newgameServer();
     }
 
-    @Override
     /**
      * Tell the server to set the available digits.
      */
+    @Override
     public void setDigit(int digit) {
         digitServer(digit);
     }
 
-    @Override
     /**
      * Tell the server a player wants to quit.
      */
+    @Override
     public void quit() {
         this.mailboxManager.sendMessage("quit", this.server);
         quitServer();

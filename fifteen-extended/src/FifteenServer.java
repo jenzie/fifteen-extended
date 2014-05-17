@@ -1,6 +1,10 @@
 /**
  * The server for Fifteen.
  *
+ * Direction of Communication (where ML is model listener, VL is view listener):
+ * ML (view) -> VL (ModelProxy) *-> server -> model
+ *      -> ML (ViewProxy) ->  VL (ModelProxy) -> ML (View)
+ *
  * @author Jenny Zhen
  * date: 05.17.14
  * language: Java
@@ -16,6 +20,10 @@ import java.net.SocketException;
 import java.util.HashMap;
 
 public class FifteenServer {
+    /**
+     * Runs the server.
+     * @param args server host, server port.
+     */
     public static void main(String[] args) {
         // Check command line arguments.
         if (args.length != 2) {
@@ -56,6 +64,7 @@ public class FifteenServer {
         // Else, add the beta player to the alpha player's session.
         FifteenModel session = null;
 
+        // Server runs indefinitely.
         while(true) {
             String line = mailboxManager.receiveMessage();
             String[] message = line.split(" ");

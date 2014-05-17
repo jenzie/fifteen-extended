@@ -1,6 +1,10 @@
 /**
  * The client for Fifteen.
  *
+ * Direction of Communication (where ML is model listener, VL is view listener):
+ * ML (view) -> VL (ModelProxy) *-> server -> model
+ *      -> ML (ViewProxy) ->  VL (ModelProxy) -> ML (View)
+ *
  * @author Jenny Zhen
  * date: 05.17.14
  * language: Java
@@ -19,6 +23,10 @@ import java.net.*;
  * numbers have been picked.
  */
 public class Fifteen {
+    /**
+     * Runs the game of Fifteen for one player.
+     * @param args the client host, client port, server host, server port.
+     */
     public static void main(String[] args) {
         // Check command line arguments.
         if (args.length != 5) {

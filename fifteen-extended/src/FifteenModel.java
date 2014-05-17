@@ -1,4 +1,6 @@
 /**
+ * The model stores the game information.
+ *
  * Direction of Communication (where ML is model listener, VL is view listener):
  * ML (view) -> VL (ModelProxy) *-> server -> model
  *      -> ML (ViewProxy) ->  VL (ModelProxy) -> ML (View)
@@ -23,6 +25,11 @@ public class FifteenModel implements FifteenViewListener {
     private int alphaScore, betaScore; // scores of the players
     private FifteenModelListener fifteenML; // the view proxy
 
+    /**
+     * Constructor for FifteenModel.
+     * @param alphaName the name of the first player.
+     * @param fifteenML the model listener that talks to the view.
+     */
     public FifteenModel(String alphaName, FifteenModelListener fifteenML) {
         this.alpha = alphaName; // save to use when both names are known
 
@@ -38,6 +45,10 @@ public class FifteenModel implements FifteenViewListener {
         this.fifteenML.setID(1);
     }
 
+    /**
+     * Adds the Beta player to the game.
+     * @param betaName the name of the second player.
+     */
     public void addPlayer(String betaName) {
         this.fifteenML.setID(2);
         this.fifteenML.setName(1, alpha);
@@ -48,6 +59,9 @@ public class FifteenModel implements FifteenViewListener {
         this.fifteenML.setScore(2, 0);
     }
 
+    /**
+     * Starts a new game; resets the game.
+     */
     @Override
     public void newgame() {
         for(int i = 0; i < MAX_TILES; i++)
@@ -68,6 +82,10 @@ public class FifteenModel implements FifteenViewListener {
         this.fifteenML.setTurn(1);
     }
 
+    /**
+     * Adds a tile to the board.
+     * @param digit the value of the tile to add.
+     */
     @Override
     public void setDigit(int digit) {
         int index = digit - 1;
@@ -115,11 +133,17 @@ public class FifteenModel implements FifteenViewListener {
         }
     }
 
+    /**
+     * Quits the game between the two players.
+     */
     @Override
     public void quit() {
         this.fifteenML.quit();
     }
 
+    /**
+     * @return the model listener that talks to the view.
+     */
     public FifteenModelListener getModelListener() {
         return this.fifteenML;
     }

@@ -1,5 +1,9 @@
 /**
- * Model <--> ViewProxy <--> ModelProxy <--> View
+ * Talks to the view, through the client.
+ *
+ * Direction of Communication (where ML is model listener, VL is view listener):
+ * ML (view) -> VL (ModelProxy) *-> server -> model
+ *      -> ML (ViewProxy) ->  VL (ModelProxy) -> ML (View)
  *
  * @author Jenny Zhen
  * date: 05.17.14
@@ -38,6 +42,10 @@ public class FifteenViewProxy implements FifteenModelListener {
         this.beta_client = beta_client;
     }
 
+    /**
+     * Tells the view the player id.
+     * @param player the id of the player.
+     */
     @Override
     public void setID(int player) {
         String message = "id " + player;
@@ -48,6 +56,11 @@ public class FifteenViewProxy implements FifteenModelListener {
             beta_mailbox.sendMessage(message, beta_client);
     }
 
+    /**
+     * Tells the view the name of the player, based on the id.
+     * @param player the id of the player.
+     * @param name the name of the player.
+     */
     @Override
     public void setName(int player, String name) {
         String message = "name " + player + " " + name;
@@ -56,6 +69,10 @@ public class FifteenViewProxy implements FifteenModelListener {
         beta_mailbox.sendMessage(message, beta_client);
     }
 
+    /**
+     * Tells the view the available tiles on the board.
+     * @param digits the tiles available.
+     */
     @Override
     public void setDigits(String digits) {
         String message = "digits " + digits;
@@ -64,6 +81,11 @@ public class FifteenViewProxy implements FifteenModelListener {
         beta_mailbox.sendMessage(message, beta_client);
     }
 
+    /**
+     * Tells the view the score of the player.
+     * @param player the id of the player.
+     * @param score the score of the player.
+     */
     @Override
     public void setScore(int player, int score) {
         String message = "score " + player + " " + score;
@@ -72,6 +94,10 @@ public class FifteenViewProxy implements FifteenModelListener {
         beta_mailbox.sendMessage(message, beta_client);
     }
 
+    /**
+     * Tells the view the current player.
+     * @param player the id of the player.
+     */
     @Override
     public void setTurn(int player) {
         String message = "turn " + player;
@@ -80,6 +106,10 @@ public class FifteenViewProxy implements FifteenModelListener {
         beta_mailbox.sendMessage(message, beta_client);
     }
 
+    /**
+     * Tells the view the winner of the game.
+     * @param player the id of the player.
+     */
     @Override
     public void setWin(int player) {
         String message = "win " + player;
@@ -88,6 +118,9 @@ public class FifteenViewProxy implements FifteenModelListener {
         beta_mailbox.sendMessage(message, beta_client);
     }
 
+    /**
+     * Tells the view to close.
+     */
     @Override
     public void quit() {
         String message = "quit";
