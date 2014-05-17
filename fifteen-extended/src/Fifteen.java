@@ -1,4 +1,6 @@
 /**
+ * The client for Fifteen.
+ *
  * @author Jenny Zhen
  * date: 05.17.14
  * language: Java
@@ -7,7 +9,6 @@
  * http://www.cs.rit.edu/~wrc/courses/csci251/projects/4/
  */
 
-import java.io.IOException;
 import java.net.*;
 
 /**

@@ -21,7 +21,7 @@ public class FifteenModel implements FifteenViewListener {
     private String alpha, beta; // name of the players
     private boolean isCurrentPlayerAlpha; // tracks the current player
     private int alphaScore, betaScore; // scores of the players
-    private FifteenModelListener fifteenML; //
+    private FifteenModelListener fifteenML; // the view proxy
 
     public FifteenModel(String alphaName, FifteenModelListener fifteenML) {
         this.alpha = alphaName;
